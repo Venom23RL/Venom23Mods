@@ -25,6 +25,12 @@ export const streamerData = {
   
   socialMedia: [
     {
+      platform: "Twitch",
+      url: "https://www.twitch.tv/ladypi89",
+      icon: "play",
+      color: "#9146ff"
+    },
+    {
       platform: "TikTok",
       url: "https://www.tiktok.com/@ladypi89",
       icon: "tiktok",
