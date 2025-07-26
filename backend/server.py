@@ -332,7 +332,7 @@ async def get_streaming_status():
             status="offline",
             game="Rocket League"
         )
-        await db.streaming_status.insert_one(default_status.dict())
+        await db.streaming_status.insert_one(model_to_dict(default_status))
         return default_status
     return StreamingStatus(**status_data)
 
