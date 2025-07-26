@@ -263,7 +263,7 @@ async def get_social_media():
 async def create_social_media(social_media: SocialMediaCreate):
     """Create a new social media link"""
     new_social_media = SocialMedia(**social_media.dict())
-    await db.social_media.insert_one(new_social_media.dict())
+    await db.social_media.insert_one(model_to_dict(new_social_media))
     return new_social_media
 
 @api_router.put("/social-media/{social_media_id}", response_model=SocialMedia)
