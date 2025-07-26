@@ -210,7 +210,7 @@ async def get_partnerships():
 async def create_partnership(partnership: PartnershipCreate):
     """Create a new partnership"""
     new_partnership = Partnership(**partnership.dict())
-    await db.partnerships.insert_one(new_partnership.dict())
+    await db.partnerships.insert_one(model_to_dict(new_partnership))
     return new_partnership
 
 @api_router.put("/partnerships/{partnership_id}", response_model=Partnership)
