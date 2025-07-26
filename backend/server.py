@@ -11,6 +11,15 @@ import uuid
 from datetime import datetime
 
 
+def model_to_dict(model):
+    """Convert Pydantic model to dict with HttpUrl converted to strings"""
+    data = model.dict()
+    for key, value in data.items():
+        if hasattr(value, '__str__') and 'HttpUrl' in str(type(value)):
+            data[key] = str(value)
+    return data
+
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
