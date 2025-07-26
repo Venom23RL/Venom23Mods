@@ -124,13 +124,20 @@ html, body, #root, .App {
   background-size: 20px 20px;
 }
 
-/* Gaming themed effects */
+/* Gaming themed effects with witch magic */
 .text-neon {
   text-shadow: 
     0 0 5px currentColor,
     0 0 10px currentColor,
     0 0 15px currentColor,
-    0 0 20px currentColor;
+    0 0 20px #8b5cf6;
+}
+
+.text-witch-glow {
+  text-shadow: 
+    0 0 10px rgba(139, 92, 246, 0.8),
+    0 0 20px rgba(168, 85, 247, 0.6),
+    0 0 30px rgba(147, 51, 234, 0.4);
 }
 
 .border-neon {
@@ -138,6 +145,13 @@ html, body, #root, .App {
   box-shadow: 
     0 0 5px currentColor,
     inset 0 0 5px currentColor;
+}
+
+.border-mystical {
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  box-shadow: 
+    0 0 15px rgba(139, 92, 246, 0.3),
+    inset 0 0 15px rgba(168, 85, 247, 0.1);
 }
 
 /* Responsive typography */
