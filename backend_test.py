@@ -401,7 +401,7 @@ class BackendTester:
         print(f"🌐 Testing against: {self.base_url}")
         print("=" * 80)
         
-        # Run all test suites
+        # Run all test suites in order that doesn't interfere with each other
         self.test_status_api()
         self.test_mongodb_models()
         self.test_biography_api()
