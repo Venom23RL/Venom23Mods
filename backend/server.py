@@ -135,6 +135,216 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+# Biography Endpoints
+@api_router.get("/biography", response_model=Biography)
+async def get_biography():
+    """Get the streamer's biography"""
+    bio_data = await db.biography.find_one()
+    if not bio_data:
+        # Return default data if none exists
+        default_bio = Biography(
+            name="LadyPi89",
+            title="Rocket League Streamer & Content Creator",
+            bio="Soy de España concretamente en las islas canarias aunque ahora vivo en Málaga",
+            tagline="Me podrás encontrar y jugar conmigo si hay hueco en las partidas"
+        )
+        await db.biography.insert_one(default_bio.dict())
+        return default_bio
+    return Biography(**bio_data)
+
+@api_router.put("/biography", response_model=Biography)
+async def update_biography(biography_update: BiographyUpdate):
+    """Update the streamer's biography"""
+    bio_data = await db.biography.find_one()
+    if not bio_data:
+        raise HTTPException(status_code=404, detail="Biography not found")
+    
+    update_dict = {k: v for k, v in biography_update.dict().items() if v is not None}
+    update_dict["updated_at"] = datetime.utcnow()
+    
+    await db.biography.update_one(
+        {"id": bio_data["id"]}, 
+        {"$set": update_dict}
+    )
+    
+    updated_bio = await db.biography.find_one({"id": bio_data["id"]})
+    return Biography(**updated_bio)
+
+# Partnership Endpoints
+@api_router.get("/partnerships", response_model=List[Partnership])
+async def get_partnerships():
+    """Get all partnerships"""
+    partnerships = await db.partnerships.find().to_list(1000)
+    if not partnerships:
+        # Return default partnerships if none exist
+        default_partnerships = [
+            Partnership(
+                name="Sin Frenos League",
+                role="Embajadora",
+                logo="💎",
+                handle="@sinfrenosleague"
+            ),
+            Partnership(
+                name="ClaveCD",
+                role="Partner",
+                logo="🕹️",
+                handle="@Clavecd",
+                url="https://www.clavecd.es/?partner-ladypi89"
+            )
+        ]
+        for partnership in default_partnerships:
+            await db.partnerships.insert_one(partnership.dict())
+        return default_partnerships
+    return [Partnership(**partnership) for partnership in partnerships]
+
+@api_router.post("/partnerships", response_model=Partnership)
+async def create_partnership(partnership: PartnershipCreate):
+    """Create a new partnership"""
+    new_partnership = Partnership(**partnership.dict())
+    await db.partnerships.insert_one(new_partnership.dict())
+    return new_partnership
+
+@api_router.put("/partnerships/{partnership_id}", response_model=Partnership)
+async def update_partnership(partnership_id: str, partnership_update: PartnershipUpdate):
+    """Update a partnership"""
+    existing_partnership = await db.partnerships.find_one({"id": partnership_id})
+    if not existing_partnership:
+        raise HTTPException(status_code=404, detail="Partnership not found")
+    
+    update_dict = {k: v for k, v in partnership_update.dict().items() if v is not None}
+    
+    await db.partnerships.update_one(
+        {"id": partnership_id}, 
+        {"$set": update_dict}
+    )
+    
+    updated_partnership = await db.partnerships.find_one({"id": partnership_id})
+    return Partnership(**updated_partnership)
+
+@api_router.delete("/partnerships/{partnership_id}")
+async def delete_partnership(partnership_id: str):
+    """Delete a partnership"""
+    result = await db.partnerships.delete_one({"id": partnership_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Partnership not found")
+    return {"message": "Partnership deleted successfully"}
+
+# Social Media Endpoints
+@api_router.get("/social-media", response_model=List[SocialMedia])
+async def get_social_media():
+    """Get all social media links"""
+    social_media = await db.social_media.find().to_list(1000)
+    if not social_media:
+        # Return default social media if none exist
+        default_social_media = [
+            SocialMedia(platform="Twitch", url="https://www.twitch.tv/ladypi89", icon="play", color="#9146ff"),
+            SocialMedia(platform="TikTok", url="https://www.tiktok.com/@ladypi89", icon="tiktok", color="#ff0050"),
+            SocialMedia(platform="Twitter", url="https://x.com/LadyPi89", icon="twitter", color="#1da1f2"),
+            SocialMedia(platform="YouTube", url="https://www.youtube.com/channel/UCDghFBnSUFW7aYc4YaYp2Dw", icon="youtube", color="#ff0000"),
+            SocialMedia(platform="Instagram", url="https://www.instagram.com/ladypi89_oficial/", icon="instagram", color="#e4405f"),
+            SocialMedia(platform="Discord", url="https://discord.com/invite/asQR5zVSgE", icon="discord", color="#7289da"),
+            SocialMedia(platform="ClaveCD", url="https://www.clavecd.es/?partner-ladypi89", icon="gamepad-2", color="#00d4ff")
+        ]
+        for social in default_social_media:
+            await db.social_media.insert_one(social.dict())
+        return default_social_media
+    return [SocialMedia(**social) for social in social_media]
+
+@api_router.post("/social-media", response_model=SocialMedia)
+async def create_social_media(social_media: SocialMediaCreate):
+    """Create a new social media link"""
+    new_social_media = SocialMedia(**social_media.dict())
+    await db.social_media.insert_one(new_social_media.dict())
+    return new_social_media
+
+@api_router.put("/social-media/{social_media_id}", response_model=SocialMedia)
+async def update_social_media(social_media_id: str, social_media_update: SocialMediaUpdate):
+    """Update a social media link"""
+    existing_social_media = await db.social_media.find_one({"id": social_media_id})
+    if not existing_social_media:
+        raise HTTPException(status_code=404, detail="Social media link not found")
+    
+    update_dict = {k: v for k, v in social_media_update.dict().items() if v is not None}
+    
+    await db.social_media.update_one(
+        {"id": social_media_id}, 
+        {"$set": update_dict}
+    )
+    
+    updated_social_media = await db.social_media.find_one({"id": social_media_id})
+    return SocialMedia(**updated_social_media)
+
+@api_router.delete("/social-media/{social_media_id}")
+async def delete_social_media(social_media_id: str):
+    """Delete a social media link"""
+    result = await db.social_media.delete_one({"id": social_media_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Social media link not found")
+    return {"message": "Social media link deleted successfully"}
+
+# Contact Form Endpoints
+@api_router.post("/contact", response_model=ContactForm)
+async def submit_contact_form(contact: ContactFormCreate):
+    """Submit a contact form"""
+    new_contact = ContactForm(**contact.dict())
+    await db.contact_forms.insert_one(new_contact.dict())
+    return new_contact
+
+@api_router.get("/contact", response_model=List[ContactForm])
+async def get_contact_forms():
+    """Get all contact form submissions"""
+    contact_forms = await db.contact_forms.find().sort("created_at", -1).to_list(1000)
+    return [ContactForm(**contact) for contact in contact_forms]
+
+@api_router.put("/contact/{contact_id}/status")
+async def update_contact_status(contact_id: str, status: str):
+    """Update contact form status"""
+    if status not in ["new", "read", "responded"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    result = await db.contact_forms.update_one(
+        {"id": contact_id}, 
+        {"$set": {"status": status}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Contact form not found")
+    return {"message": "Contact status updated successfully"}
+
+# Streaming Status endpoint
+@api_router.get("/streaming-status", response_model=StreamingStatus)
+async def get_streaming_status():
+    """Get current streaming status"""
+    status_data = await db.streaming_status.find_one()
+    if not status_data:
+        # Return default streaming status if none exists
+        default_status = StreamingStatus(
+            platform="Twitch",
+            url="https://www.twitch.tv/ladypi89",
+            status="offline",
+            game="Rocket League"
+        )
+        await db.streaming_status.insert_one(default_status.dict())
+        return default_status
+    return StreamingStatus(**status_data)
+
+@api_router.put("/streaming-status", response_model=StreamingStatus)
+async def update_streaming_status(status: str, game: str = "Rocket League"):
+    """Update streaming status"""
+    if status not in ["online", "offline", "streaming"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    status_data = await db.streaming_status.find_one()
+    if not status_data:
+        raise HTTPException(status_code=404, detail="Streaming status not found")
+    
+    await db.streaming_status.update_one(
+        {"id": status_data["id"]}, 
+        {"$set": {"status": status, "game": game, "updated_at": datetime.utcnow()}}
+    )
+    
+    updated_status = await db.streaming_status.find_one({"id": status_data["id"]})
+    return StreamingStatus(**updated_status)
+
 # Include the router in the main app
 app.include_router(api_router)
 
