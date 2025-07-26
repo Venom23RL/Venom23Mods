@@ -101,15 +101,19 @@ html, body, #root, .App {
 
 /* Utility classes */
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: witchFloat 4s ease-in-out infinite;
 }
 
 .animate-glow {
-  animation: glow 2s ease-in-out infinite alternate;
+  animation: glow 3s ease-in-out infinite alternate;
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: mysticalPulse 2s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 3s ease-in-out infinite;
 }
 
 /* Custom background patterns */
