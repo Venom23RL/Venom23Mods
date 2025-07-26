@@ -10,7 +10,8 @@ import {
   Twitter,
   MessageCircle,
   Music,
-  Gamepad2
+  Gamepad2,
+  Play
 } from 'lucide-react';
 import { streamerData, images } from '../data/mockData';
 
