@@ -75,8 +75,9 @@ export const streamerData = {
 };
 
 export const images = {
-  hero: "https://images.unsplash.com/photo-1593280359364-5242f1958068",
-  about: "https://images.unsplash.com/flagged/photo-1579657831092-4cc2db8bc15d",
-  gaming: "https://images.unsplash.com/photo-1569965352022-f014c3ca4c5e",
-  partnerships: "https://images.unsplash.com/photo-1605957073056-34ea7e8dafea"
+  hero: "https://images.unsplash.com/photo-1648878136576-5ac4e7d11111", // Abstract purple mystical background
+  about: "https://images.unsplash.com/photo-1603683402476-f7a1cadccb0e", // Witch pose/gesture
+  gaming: "https://images.unsplash.com/flagged/photo-1580234748052-2c23d8b27a71", // Gaming controller on purple background
+  partnerships: "https://images.unsplash.com/photo-1665089144441-9ed25961b149", // Mystical candles setup
+  mystical: "https://images.unsplash.com/photo-1563089145-599997674d42" // Mystical cosmic background
 };
