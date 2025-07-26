@@ -202,7 +202,7 @@ async def get_partnerships():
             )
         ]
         for partnership in default_partnerships:
-            await db.partnerships.insert_one(partnership.dict())
+            await db.partnerships.insert_one(model_to_dict(partnership))
         return default_partnerships
     return [Partnership(**partnership) for partnership in partnerships]
 
