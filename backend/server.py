@@ -255,7 +255,7 @@ async def get_social_media():
             SocialMedia(platform="ClaveCD", url="https://www.clavecd.es/?partner-ladypi89", icon="gamepad-2", color="#00d4ff")
         ]
         for social in default_social_media:
-            await db.social_media.insert_one(social.dict())
+            await db.social_media.insert_one(model_to_dict(social))
         return default_social_media
     return [SocialMedia(**social) for social in social_media]
 
