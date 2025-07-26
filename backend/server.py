@@ -1,12 +1,12 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel, Field, EmailStr, HttpUrl
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
 
@@ -26,7 +26,7 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
+# Define Models for Ladypi89 Website
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
@@ -34,6 +34,89 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+# Biography Models
+class Biography(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    title: str
+    bio: str
+    tagline: str
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class BiographyUpdate(BaseModel):
+    name: Optional[str] = None
+    title: Optional[str] = None
+    bio: Optional[str] = None
+    tagline: Optional[str] = None
+
+# Partnership Models
+class Partnership(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    role: str
+    logo: str
+    handle: str
+    url: Optional[HttpUrl] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class PartnershipCreate(BaseModel):
+    name: str
+    role: str
+    logo: str
+    handle: str
+    url: Optional[HttpUrl] = None
+
+class PartnershipUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    logo: Optional[str] = None
+    handle: Optional[str] = None
+    url: Optional[HttpUrl] = None
+
+# Social Media Models
+class SocialMedia(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    platform: str
+    url: HttpUrl
+    icon: str
+    color: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class SocialMediaCreate(BaseModel):
+    platform: str
+    url: HttpUrl
+    icon: str
+    color: str
+
+class SocialMediaUpdate(BaseModel):
+    platform: Optional[str] = None
+    url: Optional[HttpUrl] = None
+    icon: Optional[str] = None
+    color: Optional[str] = None
+
+# Contact Form Models
+class ContactForm(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    message: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    status: str = Field(default="new")  # new, read, responded
+
+class ContactFormCreate(BaseModel):
+    name: str
+    email: EmailStr
+    message: str
+
+# Streaming Status Model
+class StreamingStatus(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    platform: str
+    url: HttpUrl
+    status: str  # online, offline, streaming
+    game: str
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
