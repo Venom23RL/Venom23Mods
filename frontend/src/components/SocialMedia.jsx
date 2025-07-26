@@ -18,6 +18,7 @@ import { streamerData, images } from '../data/mockData';
 const SocialMedia = () => {
   const getIcon = (iconName) => {
     const icons = {
+      play: Play,
       youtube: Youtube,
       instagram: Instagram,
       twitter: Twitter,
