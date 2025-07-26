@@ -157,7 +157,7 @@ async def get_biography():
             bio="Soy de España concretamente en las islas canarias aunque ahora vivo en Málaga",
             tagline="Me podrás encontrar y jugar conmigo si hay hueco en las partidas"
         )
-        await db.biography.insert_one(default_bio.dict())
+        await db.biography.insert_one(model_to_dict(default_bio))
         return default_bio
     return Biography(**bio_data)
 
